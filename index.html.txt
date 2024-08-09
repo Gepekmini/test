@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gepek Delivery Challenge</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        canvas {
+            background-color: #87CEEB;
+            border: 2px solid #000;
+            margin-top: 20px;
+        }
+        #info {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gepek Delivery Challenge</h1>
+    <div id="info">
+        <p>Deliver the package by avoiding obstacles!</p>
+        <button onclick="startGame()">Start Game</button>
+    </div>
+    <canvas id="gameCanvas" width="300" height="500"></canvas>
+
+    <script>
+        let canvas = document.getElementById('gameCanvas');
+        let ctx = canvas.getContext('2d');
+        let x = canvas.width / 2;
+        let y = canvas.height - 30;
+        let dx = 2;
+        let dy = -2;
+        let carWidth = 50;
+        let carHeight = 30;
+        let rightPressed = false;
+        let leftPressed = false;
+        let score = 0;
+        let gameOver = false;
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e) {
+            if(e.key === "Right" || e.key === "ArrowRight") {
+                rightPressed = true;
+            } else if(e.key === "Left" || e.key === "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if(e.key === "Right" || e.key === "ArrowRight") {
+                rightPressed = false;
+            } else if(e.key === "Left" || e.key === "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
+
+        function drawCar() {
+            ctx.beginPath();
+            ctx.rect(x, y, carWidth, carHeight);
+            ctx.fillStyle = "#FF0000";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if(rightPressed && x < canvas.width - carWidth) {
+                x += 7;
+            } else if(leftPressed && x > 0) {
+                x -= 7;
+            }
+
+            drawCar();
+            requestAnimationFrame(draw);
+        }
+
+        function startGame() {
+            score = 0;
+            gameOver = false;
+            document.getElementById("info").style.display = "none";
+            draw();
+        }
+    </script>
+</body>
+</html>
